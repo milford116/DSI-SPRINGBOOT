@@ -6,7 +6,10 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Book;
+import com.example.demo.model.Book_user;
 import com.example.demo.model.Borrow;
 import com.example.demo.model.User;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.BorrowRepository;
 import com.example.demo.repository.UserRepository;
-
+@CrossOrigin( "*")
 @RestController
-@RequestMapping("borrow")
+@RequestMapping("/api")
 public class BorrowController {
 	@Autowired
 	BorrowRepository borrowRepository;
@@ -32,18 +36,19 @@ public class BorrowController {
 	@Autowired
 	UserRepository userRepository;
 	
-	@GetMapping
+	@GetMapping("/borrow")
 	public List<Borrow> getAllBorrow() {
+		
 		return borrowRepository.findAll();
 	}
-	@GetMapping("/findByBorrowerId")
-	public List<Borrow> getByBorrowerId(@RequestParam(value="borrowerId")long borrowerId){
-		return borrowRepository.findByBorrowerId(borrowerId);
+	@GetMapping("/findByBorrowerName/{name}")
+	public List<Borrow> getByBorrowerId(@PathVariable(value="name")String borrowerId){
+		return borrowRepository.findByBorrowerName(borrowerId);
 	}
 	
-	@GetMapping("/findByBookId")
-	public List<Borrow> getByBookId(@RequestParam(value="bookId")long bookId){
-		return borrowRepository.findByBookId(bookId);
+	@GetMapping("/findByBookName/{name}")
+	public List<Borrow> getByBookId(@PathVariable(value="name")String bookId){
+		return borrowRepository.findByBookName(bookId);
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Borrow>> getBorrowById(@PathVariable(value = "id") long id) {
@@ -51,20 +56,30 @@ public class BorrowController {
 		return ResponseEntity.ok().body(borrow);
 	}
 	
-	@PostMapping
-	public String addBorrow(@Valid @RequestBody Borrow borrow) {
-		User member = userRepository.findById(borrow.getBorrowerId()).get();
-		Book book = bookRepository.findById(borrow.getBookId()).get();
+	@PostMapping("/borrow")
+	public Borrow addBorrow(@Valid @RequestBody Borrow borrow) {
+//		User member = userRepository.findById(borrow.getBorrowerId()).get();
+//		Book book = bookRepository.findById(borrow.getBookId()).get();
 		
 //		if (book.getStock() < 1) {
 //			return "Your requested book \"" + book.getTitle() + "\" is out of stock!";
 //		}
 //		
-//		book.borrowedOne();
-		bookRepository.save(book);
-		
+//		
+//		bookRepository.save(borrow.);
+//		
 		borrowRepository.save(borrow);
-		return member.getUsername() + " has borrowed one copy of \"" + book.getTitle() + "\"!";
+		return borrow;
+	}
+	
+	@DeleteMapping("/borrow/{id}")
+	public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
+		try {
+			borrowRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

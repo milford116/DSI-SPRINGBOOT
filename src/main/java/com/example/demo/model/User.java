@@ -1,29 +1,8 @@
 package com.example.demo.model;
-
-
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.example.demo.JsonDateSerializer.JsonDateSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import javax.persistence.*;
 @Entity
 @Table(name = "user")
-@JsonIgnoreProperties(value = { "joinDate" }, allowGetters = true)
+
 public class User {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -31,11 +10,27 @@ public class User {
 	@Column(name = "username")
 	private String username;
 	
-	@Column(nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
-	@JsonSerialize(using=JsonDateSerializer.class)
-	private Date joinDate;
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "password")
+	private String password;
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public long getId() {
 		return id;
@@ -52,14 +47,18 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	public Date getJoinDate() {
-		return joinDate;
+	public User()
+	{
+		
+	}
+	public User(String name,String email,String password)
+	{
+		this.username=name;
+		this.email=email;
+		this.password=password;
 	}
 
-	public void setJoinDate(Date joinDate) {
-		this.joinDate = joinDate;
-	}
+	
 	
 	
 }

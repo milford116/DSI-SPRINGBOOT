@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.model.Borrow;
 
 public interface BorrowRepository extends JpaRepository<Borrow, Long> {
-	List<Borrow> findByBorrowerId(long borrowerId);
-	List<Borrow> findByBookId(long bookId);
+	List<Borrow> findByBorrowerName(String borrowerName);
+	List<Borrow> findByBookName(String bookName);
+	void deleteByBookName(String bookname);
 
 }
