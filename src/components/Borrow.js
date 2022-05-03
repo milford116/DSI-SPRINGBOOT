@@ -48,13 +48,13 @@ const Borrow=() =>{
           </thead>
           <tbody>
     {
-        borrows.map(b =>(
-            <tr key={b.id}>
+        borrows.map(b=>(
+            <tr key={b.borrowId}>
         <td>{b.borrowerName} </td>
         <td>{b.bookName}</td>
         <td>
         <button className="btn btn-danger ml-2" onClick={() => {
-          handleDelete(b.id);
+          handleDelete(b.borrowId);
         }} >
         Return book</button>
         </td>

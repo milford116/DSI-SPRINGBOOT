@@ -10,18 +10,36 @@ const Userlist=() =>{
     const [books,setBooks]=useState([]);
     const [selectval,setSelectval]=useState(0);
     useEffect(() => {
+      const booklist=[];
         userServices.getAll()
           .then(response => {
             console.log('Printing user data', response.data);
             setUsers(response.data);
             axios.get(`http://localhost:8080/api/books`).then((res) => {
-          setBooks(res.data);
+              axios.get(`http://localhost:8080/api/borrow`).then((newres)=>{
+              // res.data.filter(f1=>
+              //     !newres.data.bookName.includes(f1.title);
+              //     console.log('1st',f1.title);
+              //     console.log(f2.bookName);
+              //     // if (f1.title!==f2.bookName)
+              //     // {
+              //     //  booklist.push(f1);
+              //     // }
+              //     booklist=f1.title!==f2.bookName;
+                
+              // )
+               
+                  setBooks(res.data);
+                
+              })
+          //setBooks(booklist);
         });
           })
           .catch(error => {
             console.log('Something went wrong', error);
           }) 
       },[])
+      
      
 
       const handle_borrow=(user,bookname)=>{
@@ -38,6 +56,7 @@ const Userlist=() =>{
         })
     
       }
+      
       const setval=(e)=>{
         e.preventDefault();
         setSelectval(e.target.value);
