@@ -41,6 +41,7 @@ const BookList
     <h3>table of books</h3>
     <hr/>
     <div>
+    <Link to="/borrow" className="btn btn-primary mb-2">Borrow list</Link>
     <Link to="/add" className="btn btn-primary mb-2">Add Book</Link>
     <table className="table table-bordered table-striped">
           <thead className="thead-dark">
@@ -70,6 +71,8 @@ const BookList
     }
     </tbody>
     </table>
+    <Link to="/add/user" className="btn btn-primary mb-2">Add user</Link>
+    <Link to="/user" className="btn btn-primary mb-2">user-list</Link>
     </div>
     </div>
     );
